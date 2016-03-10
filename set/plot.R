@@ -12,7 +12,7 @@ for(i in 1:length(implementations)) {
 }
 
 
-par(mar=c(15,5,5,5))
+par(mar=c(20,5,5,5))
 
 barplot(m, beside = TRUE, legend.text = implementations, col = colors,
   names.arg = test_names, las = 2)

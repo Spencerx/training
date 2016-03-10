@@ -16,18 +16,6 @@ shared_examples "benchmarks" do |class_benchmarks|
       @all_benchmarks[subject.class][the_description] = time
     end
 
-    it "adds 1000 same elements" do
-      time = Benchmark.realtime do
-        1000.times do
-          subject.add(42)
-        end
-      end
-      expect(subject.size).to eq(1)
-
-      @all_benchmarks[subject.class] ||= {}
-      @all_benchmarks[subject.class][the_description] = time
-    end
-
     it "removes 1000 elements" do
       (1..1000).each do |element|
         subject.add(element)
@@ -52,6 +40,18 @@ shared_examples "benchmarks" do |class_benchmarks|
           expect(subject.contains?(10000)).to be(false)
         end
       end
+
+      @all_benchmarks[subject.class] ||= {}
+      @all_benchmarks[subject.class][the_description] = time
+    end
+
+    it "adds 20000 same elements" do
+      time = Benchmark.realtime do
+        20000.times do
+          subject.add(42)
+        end
+      end
+      expect(subject.size).to eq(1)
 
       @all_benchmarks[subject.class] ||= {}
       @all_benchmarks[subject.class][the_description] = time
