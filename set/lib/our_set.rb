@@ -1,5 +1,5 @@
 
-class Set
+class OurSet
 
   def initialize
     @items = []
@@ -8,6 +8,7 @@ class Set
   def add(item)
     return if contains? item
     @items << item
+    self
   end
 
   def size
@@ -24,6 +25,7 @@ class Set
 
   def remove(item)
     @items.delete(item)
+    self
   end
 
   def equals?(other)
@@ -33,7 +35,7 @@ class Set
     true
   end
 
-  def each 
+  def each
     @items.each do |i|
       yield i
     end

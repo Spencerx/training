@@ -5,9 +5,11 @@ class Kata
     end
     def add(o)
         @content << o if @content.count(o) < 1
+        self
     end
     def remove(o)
         @content.delete(o)
+        self
     end
     def contains?(o)
         @content.count(o) > 0
@@ -28,4 +30,3 @@ class Kata
         @content
     end
 end
-
