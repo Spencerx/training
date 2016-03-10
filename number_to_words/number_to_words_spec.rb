@@ -22,8 +22,7 @@ describe "number to words" do
     9999 => "nine thousand nine hundred ninety nine",
     10000 => "ten thousand",
     99999 => "ninety nine thousand nine hundred ninety nine",
-    100001 => "one hundred thousand one",
-    1000000 => "one million", 2743634 => "two million seven hundred fourty three thousand six hundred thirty four" }
+    100001 => "one hundred thousand one" }
 
   numbers.each do |number, word|
     it "converts #{number} to #{word}" do
