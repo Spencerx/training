@@ -1,6 +1,6 @@
 # Coding Dojo
 
-From codingdojo.org: "A Coding Dojo is a meeting where a bunch of coders get together to work on a programming challenge. They are there have fun and to engage in deliberate practice in order to improve their skills."
+From [codingdojo.org](http://codingdojo.org/): "A Coding Dojo is a meeting where a bunch of coders get together to work on a programming challenge. They are there have fun and to engage in deliberate practice in order to improve their skills."
 
 ## Format
 
