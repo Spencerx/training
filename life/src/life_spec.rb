@@ -175,4 +175,14 @@ EOT
       }.to output(expected_output).to_stdout
     end
   end
+  
+  describe "#run" do
+    it "executes one cycle of life" do
+      expect(subject).to receive(:load).with("glider.pixels")
+      expect(subject).to receive(:apply_algorithm)
+      expect(subject).to receive(:print_matrix)
+
+      subject.run("glider.pixels")
+    end
+  end
 end
