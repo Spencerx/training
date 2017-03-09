@@ -56,6 +56,23 @@ describe Life do
     end
   end
   
+  describe "#fill" do
+    it "fills (1,1) matrix" do
+      subject.fill(1,1)
+      expect(subject.cell(0,0)).to eq(true)
+    end
+
+    it "fills (3,1) matrix" do
+      subject.fill(3,1)
+      expect(subject.matrix).to eq([[true, true, true]])
+    end
+    
+    it "fills (2,2) matrix" do
+      subject.fill(2,2)
+      expect(subject.matrix).to eq([[true, true], [true, true]])
+    end
+  end
+  
   describe "#matrix" do
     context "empty 2x1 matrix" do
       before do
@@ -176,13 +193,177 @@ EOT
     end
   end
   
+  describe "#format_matrix" do
+    before do
+      subject.clear(3,2)
+      subject.set_cell(2,1)
+    end
+    
+    it "formats matrix" do
+      expected_output = <<EOT
+...
+..X
+EOT
+      expect(subject.format_matrix).to eq(expected_output)
+    end
+    
+    it "formats matrix with given symbols" do
+      expected_output = <<EOT
+000
+001
+EOT
+      expect(subject.format_matrix("1","0")).to eq(expected_output)
+    end
+  end
+  
   describe "#run" do
-    it "executes one cycle of life" do
+    before do
       expect(subject).to receive(:load).with("glider.pixels")
+    end
+  
+    it "executes one cycle of life" do
+      expect(Kernel).to receive(:system).with("clear")
       expect(subject).to receive(:apply_algorithm)
       expect(subject).to receive(:print_matrix)
+      expect(Kernel).to receive(:sleep)
+      expect(File).to receive(:write).with("glider-001.pixels", anything)
 
       subject.run("glider.pixels")
+    end
+    
+    it "executes three cycles of life" do
+      expect(Kernel).to receive(:system).with("clear").exactly(3).times
+      expect(subject).to receive(:apply_algorithm).exactly(3).times
+      expect(subject).to receive(:print_matrix).exactly(3).times
+      expect(Kernel).to receive(:sleep).exactly(3).times      
+      expect(File).to receive(:write).with("glider-001.pixels", anything)
+      expect(File).to receive(:write).with("glider-002.pixels", anything)
+      expect(File).to receive(:write).with("glider-003.pixels", anything)
+
+      subject.run("glider.pixels", 3)
+    end
+  end
+  
+  describe "#apply_algorithm" do
+    it "kills all cells" do      
+      subject.clear(3,3)
+
+      # 110
+      # 100
+      # 101
+      subject.set_cell(0,0)
+      subject.set_cell(0,1)
+      subject.set_cell(1,0)
+      subject.set_cell(2,0)
+      subject.set_cell(2,2)
+
+      expect(subject.matrix).to eq([
+        [ true,  true, true],
+        [ true, false, false],
+        [false, false, true]
+      ])
+
+      subject.apply_algorithm
+      
+      expect(subject.matrix).to eq([
+        [false, false, false],
+        [false, false, false],
+        [false, false, false]
+      ])
+    end
+
+    it "blinker" do      
+      subject.clear(5,5)
+
+      # 00000
+      # 00100
+      # 00100
+      # 00100
+      # 00000
+      subject.set_cell(2,1)
+      subject.set_cell(2,2)
+      subject.set_cell(2,3)
+
+      expect(subject.matrix).to eq([
+        [false, false, false, false, false],
+        [false, false,  true, false, false],
+        [false, false,  true, false, false],
+        [false, false,  true, false, false],
+        [false, false, false, false, false]
+      ])
+
+      subject.apply_algorithm
+      
+      expect(subject.matrix).to eq([
+        [false, false, false, false, false],
+        [false, false, false, false, false],
+        [false,  true,  true,  true, false],
+        [false, false, false, false, false],
+        [false, false, false, false, false]
+      ])
+    end
+  end
+
+  context "empty matrix" do
+    before do
+      subject.clear(3,3)
+    end
+    
+    describe "#count_neighbors(1,0)" do
+      it "returns 0" do
+        expect(subject.count_neighbors(1,0)).to eq(0)
+      end
+    end
+    
+    describe "#count_neighbors(1,1)" do
+      it "returns 0" do
+        expect(subject.count_neighbors(1,1)).to eq(0)
+      end
+    end
+  end
+    
+  context "full matrix" do
+    before do
+      subject.fill(3,3)
+    end
+    
+    describe "#count_neighbors(1,0)" do
+      it "returns 8" do
+        expect(subject.count_neighbors(1,0)).to eq(8)
+      end
+    end
+    
+    describe "#count_neighbors(1,1)" do
+      it "returns 8" do
+        expect(subject.count_neighbors(1,1)).to eq(8)
+      end
+    end
+  end
+    
+  context "mixed matrix" do
+    before do
+      subject.clear(3,3)
+
+      # 110
+      # 100
+      # 101
+      subject.set_cell(0,0)
+      subject.set_cell(0,1)
+      subject.set_cell(1,0)
+      subject.set_cell(2,0)
+      subject.set_cell(2,2)
+    end
+
+    describe "#count_neighbors(1,0)" do
+      it "returns 4" do
+        expect(subject.count_neighbors(1,0)).to eq(4)
+      end
+    end
+    
+    describe "#count_neighbors(1,1)" do
+      it "returns 5" do
+        expect(subject.count_neighbors(1,1)).to eq(5)
+      end
     end
   end
 end
