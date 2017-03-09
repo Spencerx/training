@@ -11,7 +11,7 @@ describe "life" do
     Dir.glob("integration_tests/reference/glider-*").sort.each do |reference_file|
       it "generates correct #{File.basename(reference_file)}" do
         Dir.mktmpdir do |tmp_dir|
-          output_file = File.join("src", File.basename(reference_file))
+          output_file = File.basename(reference_file)
 
           expect(File.read(output_file)).to eq(File.read(reference_file))
         end
